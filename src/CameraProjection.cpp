@@ -4,7 +4,6 @@
 CameraProjection::CameraProjection()
 {
 	m_Camera = new FlyCamera();
-	m_Camera->setPosition(vec3(10,60,10));
 }
 
 bool CameraProjection::startup()
@@ -38,12 +37,14 @@ bool CameraProjection::update()
 	vec4 m_White = vec4(1);
 	vec4 m_Black = vec4(0, 0, 0, 1);
 	Gizmos::addTransform(mat4(1));
-	m_Camera->update(dt);
+	
 	for (int i = 0; i <= 20; i++)
 	{
 		Gizmos::addLine(vec3(-10 + i, 0, -10), vec3(-10 + i, 0, 10), i == 10 ? m_White : m_Black);
 		Gizmos::addLine(vec3(-10, 0, -10 + i), vec3(10, 0, -10 + i), i == 10 ? m_White : m_Black);
 	}
+	
+	m_Camera->update(dt);
 	
 
 	return true;

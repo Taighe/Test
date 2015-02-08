@@ -15,6 +15,8 @@ public:
 
 protected:
 	GLFWwindow* m_Window;
+	int m_WindowWidth;
+	int m_WindowHeight;
 };
 
 #endif

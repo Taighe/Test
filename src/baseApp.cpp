@@ -4,7 +4,11 @@
 #include <GLFW\glfw3.h>
 #include <cstdio>
 
-Application::Application(){}
+Application::Application()
+{
+	m_WindowWidth = 1280;
+	m_WindowHeight = 720;
+}
 
 Application::~Application(){}
 
@@ -16,7 +20,7 @@ bool Application::startup()
 		return false;
 	}
 
-	m_Window = glfwCreateWindow(1280, 720, "Computer Graphics", nullptr, nullptr);
+	m_Window = glfwCreateWindow(m_WindowWidth, m_WindowHeight, "Computer Graphics", nullptr, nullptr);
 
 	if (m_Window == nullptr)
 	{
