@@ -1,7 +1,8 @@
 #include "baseCamera.h"
 
 Camera::Camera()
-{		m_Position = vec3(10, 10, 10);
+{	
+	m_Position = vec3(10, 10, 10);
 	m_ViewTransform = glm::lookAt(m_Position, vec3(0, 0, 0), vec3(0, 1, 0));
 	m_ProjectionTransform = glm::perspective(glm::radians(60.0f), 16 / 9.f, 0.1f, 1000.f);
 	m_WorldTransform = glm::inverse(m_ViewTransform);
@@ -15,17 +16,20 @@ void Camera::update(float a_DeltaTime)
 
 void Camera::setPerspective(float a_FieldOfView, float a_Near, float a_Far)
 {
-
+	m_ProjectionTransform = glm::perspective(glm::radians(60.0f), a_FieldOfView, a_Near, a_Far);
 }
 
 void Camera::setLookAt(vec3 a_From, vec3 a_To, vec3 a_Up)
 {
-	this->m_ViewTransform = glm::lookAt(a_From, a_To, a_Up);
+	m_ViewTransform = glm::lookAt(a_From, a_To, a_Up);
+	m_WorldTransform = glm::inverse(m_ViewTransform);
 }
 
 void Camera::setPosition(vec3 a_Position)
 {
 	m_Position = a_Position;
+	m_WorldTransform = m_WorldTransform * glm::translate(m_Position);
+	m_ViewTransform = glm::inverse(m_WorldTransform);
 }
 
 mat4 Camera::getWorldTransform()

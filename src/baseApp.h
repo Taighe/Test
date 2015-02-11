@@ -1,6 +1,6 @@
 #ifndef _APPLICATION_H
 #define _APPLICATION_H
-
+#include "gl_core_4_4.h"
 struct GLFWwindow;
 
 class Application

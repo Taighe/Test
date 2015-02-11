@@ -1,8 +1,8 @@
-#include "CameraProjection.h"
+#include "RenderGeo.h"
 
 int main()
 {
-	Application* app = new CameraProjection();
+	Application* app = new RenderingGeometry();
 	if (app->startup() == true)
 	{
 		while (app->update() == true)

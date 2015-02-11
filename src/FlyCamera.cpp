@@ -17,8 +17,9 @@ void FlyCamera::update(float a_DeltaTime)
 	glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
 	
 	glfwGetCursorPos(glfwGetCurrentContext(), &m_MousePosX, &m_MousePosY);
-	setPosition(vec3(m_WorldTransform[3][0], m_WorldTransform[3][1], m_WorldTransform[3][2]));
+	//setPosition(vec3(m_WorldTransform[3][0], m_WorldTransform[3][1], m_WorldTransform[3][2]));
 	
+	/*/
 	if (m_MousePosX != width / 2 && m_Timer > 1.0f)
 	{
 		float diff = m_MousePosX - width / 2;
@@ -29,36 +30,42 @@ void FlyCamera::update(float a_DeltaTime)
 		float diff = m_MousePosY - height / 2;
 		m_WorldTransform = m_WorldTransform * glm::rotate(-diff * a_DeltaTime, vec3(1, 0, 0));
 	}
-		
+	/*/
 
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_A) == GLFW_PRESS)
 	{
-		m_WorldTransform = m_WorldTransform * glm::translate(vec3(-m_Speed * a_DeltaTime, 0, 0));
+		setPosition(vec3(-m_Speed * a_DeltaTime, 0, 0));
+		//m_WorldTransform = m_WorldTransform * glm::translate(vec3(-m_Speed * a_DeltaTime, 0, 0));
 	}
 
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_D) == GLFW_PRESS)
 	{
-		m_WorldTransform = m_WorldTransform * glm::translate(vec3(m_Speed * a_DeltaTime, 0, 0));
+		setPosition(vec3(m_Speed * a_DeltaTime, 0, 0));
+		//m_WorldTransform = m_WorldTransform * glm::translate(vec3(m_Speed * a_DeltaTime, 0, 0));
 	}
 
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_W) == GLFW_PRESS)
 	{
-		m_WorldTransform = m_WorldTransform * glm::translate(vec3(0, 0, -m_Speed * a_DeltaTime));
+		setPosition(vec3(0, 0, -m_Speed * a_DeltaTime));
+		//m_WorldTransform = m_WorldTransform * glm::translate(vec3(0, 0, -m_Speed * a_DeltaTime));
 	}
 
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_S) == GLFW_PRESS)
 	{
-		m_WorldTransform = m_WorldTransform * glm::translate(vec3(0, 0, m_Speed * a_DeltaTime));
+		setPosition(vec3(0, 0, m_Speed * a_DeltaTime));
+		//m_WorldTransform = m_WorldTransform * glm::translate(vec3(0, 0, m_Speed * a_DeltaTime));
 	}
 
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_E) == GLFW_PRESS)
 	{
-		m_WorldTransform = m_WorldTransform * glm::translate(vec3(0, -m_Speed * a_DeltaTime, 0));
+		setPosition(vec3(0, -m_Speed * a_DeltaTime, 0));
+		//m_WorldTransform = m_WorldTransform * glm::translate(vec3(0, -m_Speed * a_DeltaTime, 0));
 	}
 
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_Q) == GLFW_PRESS)
 	{
-		m_WorldTransform = m_WorldTransform * glm::translate(vec3(0, m_Speed * a_DeltaTime, 0));
+		setPosition(vec3(0, m_Speed * a_DeltaTime, 0));
+		//m_WorldTransform = m_WorldTransform * glm::translate(vec3(0, m_Speed * a_DeltaTime, 0));
 	}
 	
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_R) == GLFW_PRESS)
@@ -73,6 +80,6 @@ void FlyCamera::update(float a_DeltaTime)
 
 	Camera::update(a_DeltaTime);
 	
-	glfwSetCursorPos(glfwGetCurrentContext(), width / 2, height / 2);
+	//glfwSetCursorPos(glfwGetCurrentContext(), width / 2, height / 2);
 
 }
