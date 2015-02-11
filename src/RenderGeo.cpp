@@ -14,14 +14,16 @@ bool RenderingGeometry::startup()
 	}
 	
 	generateShader();
-	generateGrid(5, 5);
+	generateGrid(10, 10);
 
 	Gizmos::create();
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 	m_Camera = new FlyCamera();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+	m_Timer = 0;
 	return true;
 }
 
@@ -34,6 +36,10 @@ bool RenderingGeometry::update()
 
 	float dt = glfwGetTime();
 	glfwSetTime(0.0f);
+	m_Timer += dt;
+	glUseProgram(m_ProgramID);
+	unsigned int timerHandle = glGetUniformLocation(m_ProgramID, "timer");
+	glUniform1f(timerHandle, m_Timer);
 
 	m_Camera->update(dt);
 	vec4 m_White = vec4(1);
@@ -59,7 +65,9 @@ void RenderingGeometry::draw()
 		glUniformMatrix4fv(projViewHandle, 1, false, (float*)&m_Camera->getProjectionView());
 	}
 
-
+	glBindVertexArray(m_VAO);
+	glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, 0);
+	
 	Gizmos::draw(m_Camera->getProjectionView());
 	glfwSwapBuffers(m_Window);
 	glfwPollEvents();
@@ -72,35 +80,36 @@ void RenderingGeometry::shutdown()
 	Application::shutdown();
 }
 
-void RenderingGeometry::generateGrid(unsigned int m_Rows, unsigned int m_Cols)
+void RenderingGeometry::generateGrid(unsigned int a_Rows, unsigned int a_Cols)
 {
-	Vertex* vertext_array = new Vertex[(m_Rows + 1) * (m_Cols + 1)];
+	
+	Vertex* vertext_array = new Vertex[(a_Rows + 1) * (a_Cols + 1)];
 
-	for (unsigned int r = 0; r < m_Rows + 1; ++r)
+	for (unsigned int r = 0; r < a_Rows + 1; ++r)
 	{
-		for (unsigned int c = 0; c < m_Cols + 1; ++c)
+		for (unsigned int c = 0; c < a_Cols + 1; ++c)
 		{
-			vertext_array[c + r * (m_Cols + 1)].position = vec4((float)c, 0, (float)r, 1);
-			vertext_array[c + r * (m_Cols + 1)].color = vec4((float)c / (m_Cols + 1), 0, (float)r / (m_Rows + 1), 1);
+			vertext_array[c + r * (a_Cols + 1)].position = vec4((float)c, 0, (float)r, 1);
+			vertext_array[c + r * (a_Cols + 1)].color = vec4((float)c / (a_Cols + 1), 0, (float)r / (a_Rows + 1), 1);
 		}
 	}
 
-	m_IndexCount = m_Rows * m_Cols * 6;
-	unsigned int* index_array = new unsigned int[m_Rows * m_Cols * 6];
+	m_IndexCount = a_Rows * a_Cols * 6;
+	unsigned int* index_array = new unsigned int[a_Rows * a_Cols * 6];
 
 	int index_location = 0;
 
-	for (unsigned int r = 0; r < m_Rows; ++r)
+	for (unsigned int r = 0; r < a_Rows; ++r)
 	{
-		for (unsigned int c = 0; c < m_Cols; ++c)
+		for (unsigned int c = 0; c < a_Cols; ++c)
 		{
-			index_array[index_location + 0] = c + r * (m_Cols + 1);
-			index_array[index_location + 1] = c + (r + 1) * (m_Cols + 1);
-			index_array[index_location + 2] = (c + 1) + r * (m_Cols + 1);
+			index_array[index_location + 0] = c + r * (a_Cols + 1);
+			index_array[index_location + 1] = c + (r + 1) * (a_Cols + 1);
+			index_array[index_location + 2] = (c + 1) + r * (a_Cols + 1);
 
-			index_array[index_location + 3] = (c + 1) + r * (m_Cols + 1);
-			index_array[index_location + 4] = c + (r + 1) * (m_Cols + 1);
-			index_array[index_location + 5] = (c + 1) + (r + 1) * (m_Cols + 1);
+			index_array[index_location + 3] = (c + 1) + r * (a_Cols + 1);
+			index_array[index_location + 4] = c + (r + 1) * (a_Cols + 1);
+			index_array[index_location + 5] = (c + 1) + (r + 1) * (a_Cols + 1);
 
 			index_location += 6;
 		}
@@ -115,7 +124,7 @@ void RenderingGeometry::generateGrid(unsigned int m_Rows, unsigned int m_Cols)
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
-	glBufferData(GL_ARRAY_BUFFER, (m_Cols + 1) * (m_Rows + 1) * sizeof(Vertex), vertext_array, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, (a_Cols + 1) * (a_Rows + 1) * sizeof(Vertex), vertext_array, GL_STATIC_DRAW);
 
 
 	glEnableVertexAttribArray(0); //Position
@@ -125,7 +134,7 @@ void RenderingGeometry::generateGrid(unsigned int m_Rows, unsigned int m_Cols)
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4)));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (m_Rows) * (m_Cols) * 6 * sizeof(unsigned int), index_array, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, a_Rows * a_Cols * 6 * sizeof(unsigned int), index_array, GL_STATIC_DRAW);
 
 	//unbinding buffers
 	glBindVertexArray(0);
@@ -143,7 +152,8 @@ void RenderingGeometry::generateShader()
 							"layout(location=1) in vec4 color;\n "
 							"out vec4 vColor;\n "
 							"uniform mat4 projectionView;\n "
-							"void main() {vColor = color; gl_Position = projectionView * position;}\n ";
+							"uniform float timer;\n "
+							"void main() { vColor = color; gl_Position = projectionView * position;}\n ";
 
 	const char* fsSource = "#version 410\n "
 							"in vec4 vColor;\n"
