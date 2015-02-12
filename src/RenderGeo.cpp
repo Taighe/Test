@@ -5,7 +5,6 @@
 #include "Gizmos.h"
 #include <cstdio>
 
-
 bool RenderingGeometry::startup()
 {
 	if (Application::startup() == false)
@@ -21,7 +20,7 @@ bool RenderingGeometry::startup()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 	m_Camera = new FlyCamera();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	m_Timer = 0;
 	return true;
@@ -153,7 +152,8 @@ void RenderingGeometry::generateShader()
 							"out vec4 vColor;\n "
 							"uniform mat4 projectionView;\n "
 							"uniform float timer;\n "
-							"void main() { vColor = color; gl_Position = projectionView * position;}\n ";
+							
+							"void main() {vec4 P = position; P.y = sin(position.x + timer); vColor = color; gl_Position = projectionView * P; }\n ";
 
 	const char* fsSource = "#version 410\n "
 							"in vec4 vColor;\n"
@@ -189,3 +189,4 @@ void RenderingGeometry::generateShader()
 	glDeleteShader(fragmentShader);
 	glDeleteShader(vertexShader);
 }
+

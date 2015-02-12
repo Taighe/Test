@@ -1,8 +1,8 @@
-#include "RenderGeo.h"
+#include "LightingApp.h"
 
 int main()
 {
-	Application* app = new RenderingGeometry();
+	Application* app = new LightingApp();
 	if (app->startup() == true)
 	{
 		while (app->update() == true)

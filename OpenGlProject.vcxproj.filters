@@ -18,6 +18,21 @@
     <Filter Include="Header Files\RenderGeometry">
       <UniqueIdentifier>{ba1a3917-d779-4dd2-bdf2-297c72c4a7a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Texturing">
+      <UniqueIdentifier>{7ad8c8ab-2672-44d2-a5a9-912dee218352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Texturing">
+      <UniqueIdentifier>{a6b3a709-908f-44df-a01e-3d576ea4d992}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{91dd65a5-3a5e-481c-bf77-950e893ab80e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lighting">
+      <UniqueIdentifier>{dfddc3ad-86db-4536-8e5b-8bd82c03be6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lighting">
+      <UniqueIdentifier>{cfa1f2da-562d-49a0-8bf1-5dc2f65d5579}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -49,6 +64,12 @@
     </ClCompile>
     <ClCompile Include="src\Utility.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texturing.cpp">
+      <Filter>Source Files\Texturing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LightingApp.cpp">
+      <Filter>Source Files\Lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +105,15 @@
     </ClInclude>
     <ClInclude Include="src\Utility.h">
       <Filter>Header Files\RenderGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texturing.h">
+      <Filter>Header Files\Texturing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LightingApp.h">
+      <Filter>Header Files\Lighting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
