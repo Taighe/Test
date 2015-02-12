@@ -9,4 +9,4 @@ void main()
 {
 	vTexCoord = TexCoord; 
 	gl_Position = projectionView * position; 
-};
+}

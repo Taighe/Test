@@ -116,4 +116,12 @@
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="data\shaders\textureV_shader.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\textureF_shader.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

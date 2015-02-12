@@ -1,8 +1,8 @@
-#include "LightingApp.h"
+#include "Texturing.h"
 
 int main()
 {
-	Application* app = new LightingApp();
+	Application* app = new Texturing();
 	if (app->startup() == true)
 	{
 		while (app->update() == true)

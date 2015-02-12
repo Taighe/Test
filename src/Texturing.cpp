@@ -6,6 +6,8 @@
 #include "Gizmos.h"
 #include <cstdio>
 #include "stb_image.h"
+#include "Utility.h"
+
 
 bool Texturing::startup()
 {
@@ -13,19 +15,20 @@ bool Texturing::startup()
 	{
 		return false;
 	}
-
-	generateShader();
-	generateGrid(10, 10);
-	//generateQuad(5.0f);
-
+	
 	Gizmos::create();
+	loadTexture("./textures/crate.png");
+
+	loadShaders("./shaders/textureV_shader.glsl", "./shaders/textureF_shader.glsl", &m_ProgramID);
+
+	generateGrid(10,10);
+
+	
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 	m_Camera = new FlyCamera();
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	loadTexture("./textures/crate.png");
 
 	m_Timer = 0;
 	return true;

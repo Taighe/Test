@@ -5,6 +5,7 @@
 #include "Gizmos.h"
 #include <cstdio>
 
+
 bool RenderingGeometry::startup()
 {
 	if (Application::startup() == false)
