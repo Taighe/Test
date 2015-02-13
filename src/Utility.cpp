@@ -2,7 +2,6 @@
 #include "gl_core_4_4.h"
 #include <cstdio>
 
-
 bool loadShaders(char* a_vertexFile, char* a_fragmentFile, GLuint* a_result)
 {
 	bool succeeded = false;
@@ -43,8 +42,8 @@ bool loadShaders(char* a_vertexFile, char* a_fragmentFile, GLuint* a_result)
 
 		glAttachShader(*a_result, vertexShader);
 		glAttachShader(*a_result, fragmentShader);
-		glBindAttribLocation(*a_result, 0, "position");
-		glBindAttribLocation(*a_result, 1, "TexCoord");
+		//glBindAttribLocation(*a_result, 0, "position");
+		//glBindAttribLocation(*a_result, 1, "TexCoord");
 		glLinkProgram(*a_result);
 		glGetProgramiv(*a_result, GL_LINK_STATUS, &success);
 

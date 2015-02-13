@@ -13,6 +13,7 @@ public:
 	void setSpeed(float a_Speed);
 
 private:
+	bool m_EnableMouse;
 	vec3 m_Direction;
 	float m_Speed;
 	float m_Timer;

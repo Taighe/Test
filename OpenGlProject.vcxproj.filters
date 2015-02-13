@@ -33,6 +33,12 @@
     <Filter Include="Source Files\Lighting">
       <UniqueIdentifier>{cfa1f2da-562d-49a0-8bf1-5dc2f65d5579}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\AdvancedTextures">
+      <UniqueIdentifier>{31a8f919-a33a-4129-b990-fd20145ac06f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AdvancedTextures">
+      <UniqueIdentifier>{fc261ba6-39ad-4c56-9831-0a6f9ad9dec0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -65,11 +71,17 @@
     <ClCompile Include="src\Utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Texturing.cpp">
-      <Filter>Source Files\Texturing</Filter>
-    </ClCompile>
     <ClCompile Include="src\LightingApp.cpp">
       <Filter>Source Files\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tiny_obj_loader.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AdvancedTexturing.cpp">
+      <Filter>Source Files\AdvancedTextures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texturing.cpp">
+      <Filter>Source Files\Texturing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,12 +127,30 @@
     <ClInclude Include="src\LightingApp.h">
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="src\tiny_obj_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AdvancedTexturing.h">
+      <Filter>Header Files\AdvancedTextures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\textureV_shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="data\shaders\textureF_shader.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\lightingVertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\lightingFragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\normalMappedVertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\normalMappedFragment.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

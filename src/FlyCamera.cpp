@@ -8,6 +8,7 @@ FlyCamera::FlyCamera()
 	glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
 	glfwSetCursorPos(glfwGetCurrentContext(), width / 2, height / 2);
 	m_Timer = 0;
+	m_EnableMouse = false;
 }
 
 void FlyCamera::update(float a_DeltaTime)
@@ -18,12 +19,17 @@ void FlyCamera::update(float a_DeltaTime)
 	
 	glfwGetCursorPos(glfwGetCurrentContext(), &m_MousePosX, &m_MousePosY);
 	
-	if (m_MousePosX != width / 2 && m_Timer > 1.0f)
+	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		m_EnableMouse = !m_EnableMouse;
+	}
+
+	if (m_MousePosX != width / 2 && m_EnableMouse)
 	{
 		float diff = m_MousePosX - width / 2;
 		m_WorldTransform = m_WorldTransform * glm::rotate(-diff * a_DeltaTime, vec3(0, 1, 0));
 	}
-	if (m_MousePosY != height / 2 && m_Timer > 1.0f)
+	if (m_MousePosY != height / 2 && m_EnableMouse)
 	{
 		float diff = m_MousePosY - height / 2;
 		m_WorldTransform = m_WorldTransform * glm::rotate(-diff * a_DeltaTime, vec3(1, 0, 0));
@@ -77,6 +83,7 @@ void FlyCamera::update(float a_DeltaTime)
 
 	Camera::update(a_DeltaTime);
 	
-	glfwSetCursorPos(glfwGetCurrentContext(), width / 2, height / 2);
+	if (m_EnableMouse)
+		glfwSetCursorPos(glfwGetCurrentContext(), width / 2, height / 2);
 
 }

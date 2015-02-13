@@ -1,8 +1,8 @@
-#include "Texturing.h"
+#include "AdvancedTexturing.h"
 
 int main()
 {
-	Application* app = new Texturing();
+	Application* app = new AdvancedTexturing();
 	if (app->startup() == true)
 	{
 		while (app->update() == true)

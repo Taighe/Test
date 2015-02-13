@@ -1,10 +1,9 @@
 #ifndef _GLM_H
 #define _GLM_H
 
+#define GLM_SWIZZLE
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
-
-#define GLM_SWIZZLE
 
 using glm::vec2;
 using glm::vec3;
