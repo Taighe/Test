@@ -82,6 +82,7 @@ void Texturing::draw()
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, 0);
 
+
 	Gizmos::draw(m_Camera->getProjectionView());
 	glfwSwapBuffers(m_Window);
 	glfwPollEvents();

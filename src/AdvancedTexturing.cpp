@@ -23,10 +23,13 @@ bool AdvancedTexturing::startup()
 	
 	generateQuad(5.0f);
 	
-	loadTexture("./textures/rock_diffuse.tga", "./textures/rock_diffuse.tga", "./textures/rock_specular.tga");
+	loadTexture("./textures/rock_diffuse.tga", "./textures/rock_normal.tga", "./textures/rock_specular.tga");
 	loadShaders("./shaders/normalMappedVertex.glsl", "./shaders/normalMappedFragment.glsl", &m_ProgramID);
 
 	m_ambientLight = vec3(0.1f);
+	m_lightDir = (vec3(-1, -1, 0));
+	m_lightColor = vec3(0.7f);
+	m_specularPower = 15;
 
 	return true;
 }
@@ -48,25 +51,13 @@ bool AdvancedTexturing::update()
 	vec4 m_Black = vec4(0, 0, 0, 1);
 	Gizmos::addTransform(mat4(1));
 	
-	unsigned int ambientUniform = glGetUniformLocation(m_ProgramID, "ambientLight");
-	unsigned int lightDirUniform = glGetUniformLocation(m_ProgramID, "lightDir");
-	unsigned int lightColorUniform = glGetUniformLocation(m_ProgramID, "lightColor");
-	unsigned int specularPowerUniform = glGetUniformLocation(m_ProgramID, "specularPower");
-	unsigned int eyePosUniform = glGetUniformLocation(m_ProgramID, "eyePos");
 
-	glUniform3fv(ambientUniform, 1, (float*)&m_ambientLight);
-	glUniform3fv(lightDirUniform, 1, (float*)&m_lightDir);
-	glUniform3fv(lightColorUniform, 1, (float*)&m_lightColor);
-	glUniform1f(specularPowerUniform, m_specularPower);
-
-	vec3 cameraPos = m_Camera->getWorldTransform()[3].xyz;
-	glUniform3fv(eyePosUniform, 1, (float*)&cameraPos);
 
 
 	for (int i = 0; i <= 20; i++)
 	{
-		Gizmos::addLine(vec3(-10 + i, 0, -10), vec3(-10 + i, 0, 10), i == 10 ? m_White : m_Black);
-		Gizmos::addLine(vec3(-10, 0, -10 + i), vec3(10, 0, -10 + i), i == 10 ? m_White : m_Black);
+		Gizmos::addLine(vec3(-10 + i, -1, -10), vec3(-10 + i, -1, 10), i == 10 ? m_White : m_Black);
+		Gizmos::addLine(vec3(-10, -1, -10 + i), vec3(10, -1, -10 + i), i == 10 ? m_White : m_Black);
 	}
 
 	m_lightDir = (glm::rotate(dt, vec3(0, 1, 0)) * vec4(m_lightDir, 0)).xyz;
@@ -79,6 +70,29 @@ bool AdvancedTexturing::update()
 
 void AdvancedTexturing::draw()
 {
+	glUseProgram(m_ProgramID);
+	int projViewHandle = glGetUniformLocation(m_ProgramID, "projectionView");
+
+	if (projViewHandle >= 0)
+	{
+		glUniformMatrix4fv(projViewHandle, 1, false, (float*)&m_Camera->getProjectionView());
+	}
+	
+	unsigned int ambientUniform = glGetUniformLocation(m_ProgramID, "ambientLight");
+	unsigned int lightDirUniform = glGetUniformLocation(m_ProgramID, "lightDir");
+	unsigned int lightColorUniform = glGetUniformLocation(m_ProgramID, "lightColor");
+	unsigned int specularPowerUniform = glGetUniformLocation(m_ProgramID, "specularPower");
+	unsigned int eyePosUniform = glGetUniformLocation(m_ProgramID, "eyePos");
+
+	glUniform3fv(ambientUniform, 1, (float*)&m_ambientLight);
+	glUniform3fv(lightDirUniform, 1, (float*)&m_lightDir);
+	glUniform3fv(lightColorUniform, 1, (float*)&m_lightColor);
+	
+
+	vec3 cameraPos = m_Camera->getWorldTransform()[3].xyz;
+	glUniform3fv(eyePosUniform, 1, (float*)&cameraPos);
+	glUniform1f(specularPowerUniform, m_specularPower);
+	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_DiffuseTexture);
 
@@ -92,6 +106,13 @@ void AdvancedTexturing::draw()
 	int normalLocation = glGetUniformLocation(m_ProgramID, "normalTex");
 	int specularLocation = glGetUniformLocation(m_ProgramID, "specularTex");
 	
+	glUniform1i(diffuseLocation, 0);
+	glUniform1i(normalLocation, 1);
+	glUniform1i(specularLocation, 2);
+
+	glBindVertexArray(m_Quad.m_VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 	Gizmos::draw(m_Camera->getProjectionView());
 	glfwSwapBuffers(m_Window);
 	glfwPollEvents();
@@ -129,7 +150,7 @@ void AdvancedTexturing::generateQuad(float a_Size)
 	vertex_data[2].texCoord = vec2(1, 1);
 	vertex_data[3].texCoord = vec2(1, 0);
 
-	unsigned int index_data[6] = { 0, 1, 2, 0, 2, 3, };
+	unsigned int index_data[6] = { 0, 1, 2, 0, 2, 3 };
 	m_Quad.m_IndexCount = 6;
 
 
@@ -141,7 +162,7 @@ void AdvancedTexturing::generateQuad(float a_Size)
 	glBindVertexArray(m_Quad.m_VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_Quad.m_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(TextureVertex)* 4, vertex_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(nVertex) * 4, vertex_data, GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Quad.m_IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)* 6, index_data, GL_STATIC_DRAW);
@@ -152,7 +173,7 @@ void AdvancedTexturing::generateQuad(float a_Size)
 	glEnableVertexAttribArray(3); // tex coord
 
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(nVertex), 0);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE, sizeof(nVertex), (void*)(sizeof(vec4)));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_TRUE, sizeof(nVertex), (void*)(sizeof(vec4) * 1));
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_TRUE, sizeof(nVertex), (void*)(sizeof(vec4) * 2));
 	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(nVertex), (void*)(sizeof(vec4) * 3));
 

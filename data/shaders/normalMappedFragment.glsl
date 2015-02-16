@@ -18,8 +18,6 @@ uniform sampler2D diffuseTex;
 uniform sampler2D normalTex;
 uniform sampler2D specularTex;
 
-uniform mat4 projectionView;
-
 void main()
 {
 	mat3 TBN = mat3(normalize(fragTangent), normalize(fragBiTangent), normalize(fragNormal));
@@ -43,7 +41,7 @@ void main()
 	s = pow(s, specularPower);
 
 	vec3 materialSpecular = texture(specularTex, fragTexCoord).xyz;
-	vec3 specular = vec3(s) * lightColor * materialColor;
+	vec3 specular = vec3(s) * lightColor * materialSpecular;
 	
 	fragColor = vec4(ambient + diffuse + specular, 1); 	
 }
