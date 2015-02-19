@@ -19,6 +19,7 @@ void FlyCamera::update(float a_DeltaTime)
 	
 	glfwGetCursorPos(glfwGetCurrentContext(), &m_MousePosX, &m_MousePosY);
 	
+
 	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
 		m_EnableMouse = !m_EnableMouse;

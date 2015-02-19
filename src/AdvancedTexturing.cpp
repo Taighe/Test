@@ -4,6 +4,38 @@
 #include "stb_image.h"
 #include "Utility.h"
 
+
+void onMouseButton(GLFWwindow* a_Window, int a_Button, int a_Pressed, int a_AltKeys)
+{
+	TwEventMouseButtonGLFW(a_Button, a_Pressed);
+}
+
+void onMousePosition(GLFWwindow* a_Window, double a_X, double a_Y)
+{
+	TwEventMousePosGLFW((int)a_X, (int)a_Y);
+}
+
+void onMouseScroll(GLFWwindow* a_Window, double a_X, double a_Y)
+{
+	TwEventMouseWheelGLFW((int)a_Y);
+}
+
+void onKey(GLFWwindow* a_Window, int a_Key, int a_Scancode, int a_Pressed, int a_AltKeys)
+{
+	TwEventKeyGLFW(a_Key, a_Pressed);
+}
+
+void onChar(GLFWwindow* a_Window, unsigned int a_C)
+{
+	TwEventCharGLFW(a_C, GLFW_PRESS);
+}
+
+void onWindowResize(GLFWwindow* a_Window, int a_Width, int a_Height)
+{
+	TwWindowSize(a_Width, a_Height);
+	glViewport(0, 0, a_Width, a_Height);
+}
+
 AdvancedTexturing::AdvancedTexturing()
 {
 	m_Camera = new FlyCamera();
@@ -16,10 +48,16 @@ bool AdvancedTexturing::startup()
 		return false;
 	}
 
+	glfwSetMouseButtonCallback(m_Window, onMouseButton);
+	glfwSetCursorPosCallback(m_Window, onMousePosition);
+	glfwSetScrollCallback(m_Window, onMouseScroll);
+	glfwSetKeyCallback(m_Window, onKey);
+	glfwSetCharCallback(m_Window, onChar);
+	glfwSetWindowSizeCallback(m_Window, onWindowResize);
+	
 	Gizmos::create();
 
 	glEnable(GL_DEPTH_TEST);
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	
 	generateQuad(5.0f);
 	
@@ -27,9 +65,22 @@ bool AdvancedTexturing::startup()
 	loadShaders("./shaders/normalMappedVertex.glsl", "./shaders/normalMappedFragment.glsl", &m_ProgramID);
 
 	m_ambientLight = vec3(0.1f);
-	m_lightDir = (vec3(-1, -1, 0));
-	m_lightColor = vec3(0.7f);
-	m_specularPower = 15;
+	m_lightDir = (vec3(0, -1, -1));
+	m_lightColor = vec3(1.0f);
+	m_specularPower = 15.0f;
+	m_GizmoSize = 10;
+
+	TwInit(TW_OPENGL_CORE, nullptr);
+	TwWindowSize(m_WindowWidth, m_WindowHeight);
+	m_Bar = TwNewBar("My Bar");
+	TwAddVarRW(m_Bar, "Clear Color", TW_TYPE_COLOR4F, &m_backgroundColor, "");
+	TwAddVarRW(m_Bar, "Direction", TW_TYPE_DIR3F, &m_lightDir, "group=Light");
+	TwAddVarRW(m_Bar, "Color", TW_TYPE_COLOR4F, &m_lightColor, "group=Light");
+	TwAddVarRW(m_Bar, "Specular Power", TW_TYPE_FLOAT, &m_specularPower, "group=Light min=0.1 max=100 step=0.5");
+	TwAddVarRW(m_Bar, "Size", TW_TYPE_INT32, &m_GizmoSize, "group=Gizmo min=0 step=2");
+
+	TwAddVarRO(m_Bar, "FPS", TW_TYPE_FLOAT, &m_FPS, "");
+	m_backgroundColor = vec4(0.3f, 0.3f, 0.3f, 1.0f);
 
 	return true;
 }
@@ -41,7 +92,10 @@ bool AdvancedTexturing::update()
 		return false;
 	}
 
+	
+
 	float dt = glfwGetTime();
+	m_FPS = 1 / dt;
 	glfwSetTime(0.0f);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -52,24 +106,22 @@ bool AdvancedTexturing::update()
 	Gizmos::addTransform(mat4(1));
 	
 
-
-
-	for (int i = 0; i <= 20; i++)
+	for (int i = 0; i <= m_GizmoSize; i++)
 	{
-		Gizmos::addLine(vec3(-10 + i, -1, -10), vec3(-10 + i, -1, 10), i == 10 ? m_White : m_Black);
-		Gizmos::addLine(vec3(-10, -1, -10 + i), vec3(10, -1, -10 + i), i == 10 ? m_White : m_Black);
+		Gizmos::addLine(vec3(-m_GizmoSize / 2 + i, -1, -m_GizmoSize / 2), vec3(-m_GizmoSize / 2 + i, -1, m_GizmoSize / 2), i == m_GizmoSize / 2 ? m_White : m_Black);
+		Gizmos::addLine(vec3(-m_GizmoSize / 2, -1, -m_GizmoSize / 2 + i), vec3(m_GizmoSize / 2, -1, -m_GizmoSize / 2 + i), i == m_GizmoSize / 2 ? m_White : m_Black);
 	}
 
-	m_lightDir = (glm::rotate(dt, vec3(0, 1, 0)) * vec4(m_lightDir, 0)).xyz;
+	//m_lightDir = (glm::rotate(dt, vec3(0, 1, 0)) * vec4(m_lightDir, 0)).xyz;
 
 	m_Camera->update(dt);
-
 
 	return true;
 }
 
 void AdvancedTexturing::draw()
 {
+	glClearColor(m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w);
 	glUseProgram(m_ProgramID);
 	int projViewHandle = glGetUniformLocation(m_ProgramID, "projectionView");
 
@@ -112,7 +164,7 @@ void AdvancedTexturing::draw()
 
 	glBindVertexArray(m_Quad.m_VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
+	TwDraw();
 	Gizmos::draw(m_Camera->getProjectionView());
 	glfwSwapBuffers(m_Window);
 	glfwPollEvents();
@@ -121,6 +173,9 @@ void AdvancedTexturing::draw()
 void AdvancedTexturing::shutdown()
 {
 	Gizmos::destroy();
+
+	TwDeleteAllBars();
+	TwTerminate();
 
 	Application::shutdown();
 }

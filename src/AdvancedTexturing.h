@@ -4,6 +4,7 @@
 #include "baseApp.h"
 #include "glm_header.h"
 #include "Vertex.h"
+#include "AntTweakBar.h"
 
 class Camera;
 
@@ -28,12 +29,16 @@ private:
 	vec3 m_lightColor;
 	vec3 m_ambientLight;
 	vec3 m_eyePos;
+	int m_GizmoSize;
+	float m_FPS;
+	vec4 m_backgroundColor;
 	float m_specularPower;
 	unsigned int m_ProgramID;
 	unsigned int m_DiffuseTexture; 
 	unsigned int m_NormalTexture;
 	unsigned int m_SpecularTexture;
 	unsigned int m_NormalMap;
+	TwBar* m_Bar;
 };
 
 #endif

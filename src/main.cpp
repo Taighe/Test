@@ -1,8 +1,8 @@
-#include "AdvancedTexturing.h"
+#include "Quaternion.h"
 
 int main()
 {
-	Application* app = new AdvancedTexturing();
+	Application* app = new Quaternion();
 	if (app->startup() == true)
 	{
 		while (app->update() == true)
