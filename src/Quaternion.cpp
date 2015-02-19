@@ -80,12 +80,31 @@ bool Quaternion::update()
 	//Gizmos::addAABBFilled(finalPos, vec3(1), vec4(0, 0, 1, 1), &transform);
 
 	// linearly interpolate hip position
-	glm::vec3 p = (1.0f - sinwave) * m_HipFrames[0].position + sinwave * m_HipFrames[1].position;
+	glm::vec3 p = (1.0f - sinwave) * m_HipFrames[0].position + sinwave * m_HipFrames[1].position;
+
 	// spherically interpolate hip rotation
 	glm::quat finalRotation = glm::slerp(m_HipFrames[0].rotation, m_HipFrames[1].rotation, sinwave);
 
 	//update the hip bone
 	m_HipBone = glm::translate(p) * glm::toMat4(finalRotation);
+
+	// linearly interpolate knee position
+	p = (1.0f - sinwave) * m_KneeFrames[0].position + sinwave * m_KneeFrames[1].position;
+
+	// spherically interpolate knee rotation
+	finalRotation = glm::slerp(m_KneeFrames[0].rotation, m_KneeFrames[1].rotation, sinwave);
+	
+	//update the knee bone
+	m_KneeBone = m_HipBone * glm::translate(p) * glm::toMat4(finalRotation);
+
+	// linearly interpolate ankle position
+	p = (1.0f - sinwave) * m_AnkleFrames[0].position + sinwave * m_AnkleFrames[1].position;
+
+	// spherically interpolate ankle rotation
+	finalRotation = glm::slerp(m_AnkleFrames[0].rotation, m_AnkleFrames[1].rotation, sinwave);
+
+	//update the ankle bone
+	m_AnkleBone = m_KneeBone * glm::translate(p) * glm::toMat4(finalRotation);
 
 	glm::vec3 hipPos = glm::vec3(m_HipBone[3].x,m_HipBone[3].y, m_HipBone[3].z);
 	glm::vec3 kneePos = glm::vec3(m_KneeBone[3].x, m_KneeBone[3].y, m_KneeBone[3].z);
