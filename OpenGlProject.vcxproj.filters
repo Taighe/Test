@@ -15,9 +15,6 @@
     <Filter Include="Source Files\Cameras">
       <UniqueIdentifier>{1b215105-2539-4ec5-b382-62f76dfd40ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\RenderGeometry">
-      <UniqueIdentifier>{ba1a3917-d779-4dd2-bdf2-297c72c4a7a1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Texturing">
       <UniqueIdentifier>{7ad8c8ab-2672-44d2-a5a9-912dee218352}</UniqueIdentifier>
     </Filter>
@@ -44,6 +41,15 @@
     </Filter>
     <Filter Include="Source Files\Quaternion">
       <UniqueIdentifier>{b78b7a40-ee55-4e1a-978d-0f00a0e9f5c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Animation">
+      <UniqueIdentifier>{639d8be4-4b72-487c-b83e-e3b2aae93205}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Texturing\RenderGeometry">
+      <UniqueIdentifier>{ba1a3917-d779-4dd2-bdf2-297c72c4a7a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Animation">
+      <UniqueIdentifier>{a5d6b1ae-1277-46ca-90bb-8e6920173e2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +98,9 @@
     <ClCompile Include="src\Quaternion.cpp">
       <Filter>Source Files\Quaternion</Filter>
     </ClCompile>
+    <ClCompile Include="src\Animation.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gl_core_4_4.h">
@@ -116,16 +125,10 @@
       <Filter>Header Files\Cameras</Filter>
     </ClInclude>
     <ClInclude Include="src\RenderGeo.h">
-      <Filter>Header Files\RenderGeometry</Filter>
+      <Filter>Header Files\Texturing\RenderGeometry</Filter>
     </ClInclude>
     <ClInclude Include="src\glm_header.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Vertex.h">
-      <Filter>Header Files\RenderGeometry</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utility.h">
-      <Filter>Header Files\RenderGeometry</Filter>
     </ClInclude>
     <ClInclude Include="src\stb_image.h">
       <Filter>Header Files</Filter>
@@ -145,6 +148,15 @@
     <ClInclude Include="src\Quaternion.h">
       <Filter>Header Files\Quaternion</Filter>
     </ClInclude>
+    <ClInclude Include="src\Animation.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\textureV_shader.glsl">
@@ -163,6 +175,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="data\shaders\normalMappedFragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\skinnedVertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\skinnedFragment.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

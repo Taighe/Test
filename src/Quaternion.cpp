@@ -47,8 +47,6 @@ bool Quaternion::startup()
 	m_AnkleFrames[1].position = glm::vec3(0, -2.5f, 0);
 	m_AnkleFrames[1].rotation = glm::quat(vec3(0, 0, 0));
 
-
-
 	return true;
 }
 

@@ -1,8 +1,8 @@
-#include "Quaternion.h"
+#include "Animation.h"
 
 int main()
 {
-	Application* app = new Quaternion();
+	Application* app = new Animation();
 	if (app->startup() == true)
 	{
 		while (app->update() == true)
