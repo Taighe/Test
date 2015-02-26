@@ -2,11 +2,11 @@
 #define _ADVANCEDTEX_H
 
 #include "baseApp.h"
-#include "glm_header.h"
 #include "Vertex.h"
-#include "AntTweakBar.h"
+#include "TweakBar.h"
 
 class Camera;
+
 
 class AdvancedTexturing : public Application
 {

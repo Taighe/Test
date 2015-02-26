@@ -19,6 +19,8 @@
     <ClCompile Include="src\FlyCamera.cpp" />
     <ClCompile Include="src\Gizmos.cpp" />
     <ClCompile Include="src\LightingApp.cpp" />
+    <ClCompile Include="src\ParticleApp.cpp" />
+    <ClCompile Include="src\ParticleEmitter.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\RenderGeo.cpp" />
     <ClCompile Include="src\gl_core_4_4.c" />
@@ -26,6 +28,7 @@
     <ClCompile Include="src\solarSystem.cpp" />
     <ClCompile Include="src\Texturing.cpp" />
     <ClCompile Include="src\tiny_obj_loader.cc" />
+    <ClCompile Include="src\TweakBar.cpp" />
     <ClCompile Include="src\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,12 +42,15 @@
     <ClInclude Include="src\glm_header.h" />
     <ClInclude Include="src\gl_core_4_4.h" />
     <ClInclude Include="src\LightingApp.h" />
+    <ClInclude Include="src\ParticleApp.h" />
+    <ClInclude Include="src\ParticleEmitter.h" />
     <ClInclude Include="src\Quaternion.h" />
     <ClInclude Include="src\RenderGeo.h" />
     <ClInclude Include="src\solarSystem.h" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\Texturing.h" />
     <ClInclude Include="src\tiny_obj_loader.h" />
+    <ClInclude Include="src\TweakBar.h" />
     <ClInclude Include="src\Utility.h" />
     <ClInclude Include="src\Vertex.h" />
   </ItemGroup>
@@ -53,6 +59,8 @@
     <None Include="data\shaders\lightingVertex.glsl" />
     <None Include="data\shaders\normalMappedFragment.glsl" />
     <None Include="data\shaders\normalMappedVertex.glsl" />
+    <None Include="data\shaders\particleFragment.glsl" />
+    <None Include="data\shaders\particleVertex.glsl" />
     <None Include="data\shaders\skinnedFragment.glsl" />
     <None Include="data\shaders\skinnedVertex.glsl" />
     <None Include="data\shaders\textureF_shader.glsl" />

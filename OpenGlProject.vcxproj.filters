@@ -51,6 +51,12 @@
     <Filter Include="Source Files\Animation">
       <UniqueIdentifier>{a5d6b1ae-1277-46ca-90bb-8e6920173e2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Particle System">
+      <UniqueIdentifier>{39b3cd43-f6e9-4e8f-8a01-fd544dd9e7db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ParticleSystem">
+      <UniqueIdentifier>{615c62d8-166f-4887-b783-9ab6b01a3378}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -100,6 +106,15 @@
     </ClCompile>
     <ClCompile Include="src\Animation.cpp">
       <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleApp.cpp">
+      <Filter>Source Files\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TweakBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleEmitter.cpp">
+      <Filter>Source Files\ParticleSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +172,15 @@
     <ClInclude Include="src\Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\ParticleApp.h">
+      <Filter>Header Files\Particle System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TweakBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticleEmitter.h">
+      <Filter>Header Files\Particle System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\textureV_shader.glsl">
@@ -181,6 +205,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="data\shaders\skinnedFragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\particleVertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\particleFragment.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
