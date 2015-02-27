@@ -57,6 +57,12 @@
     <Filter Include="Source Files\ParticleSystem">
       <UniqueIdentifier>{615c62d8-166f-4887-b783-9ab6b01a3378}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GPU Particle System">
+      <UniqueIdentifier>{df52a3ff-7547-4238-ba7b-74d4b10903e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GPU Particle System">
+      <UniqueIdentifier>{d59d30c2-7546-4280-ac87-69bf5ef0cc93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl_core_4_4.c">
@@ -115,6 +121,12 @@
     </ClCompile>
     <ClCompile Include="src\ParticleEmitter.cpp">
       <Filter>Source Files\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GPUParticleApp.cpp">
+      <Filter>Source Files\GPU Particle System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GPUEmitter.cpp">
+      <Filter>Source Files\GPU Particle System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +193,12 @@
     <ClInclude Include="src\ParticleEmitter.h">
       <Filter>Header Files\Particle System</Filter>
     </ClInclude>
+    <ClInclude Include="src\GPUParticleApp.h">
+      <Filter>Header Files\GPU Particle System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GPUEmitter.h">
+      <Filter>Header Files\GPU Particle System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\textureV_shader.glsl">
@@ -211,6 +229,18 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="data\shaders\particleFragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\gpuParticleGeom.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\gpuParticleVert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\gpuParticleFrag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\shaders\gpuParticleUpdate.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

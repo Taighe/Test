@@ -2,6 +2,64 @@
 #include "gl_core_4_4.h"
 #include <cstdio>
 
+bool loadShader(char* a_vertexFile, GLuint* a_result)
+{
+	bool succeeded = false;
+
+	FILE* vertexFile = fopen(a_vertexFile, "r");
+
+	if (vertexFile == 0)
+	{
+		fclose(vertexFile);
+	}
+	else
+	{
+		fseek(vertexFile, 0, SEEK_END);
+		int vertexFileLength = ftell(vertexFile);
+		fseek(vertexFile, 0, SEEK_SET);
+
+		char* vsSource = new char[vertexFileLength];
+
+		vertexFileLength = fread(vsSource, 1, vertexFileLength, vertexFile);
+
+		
+		unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(vertexShader, 1, &vsSource, &vertexFileLength);
+		glCompileShader(vertexShader);
+		
+		int success = GL_FALSE;
+		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+			
+		if (success == GL_FALSE)
+		{
+			int length = 0;
+			char* infoLog = new char[length];
+			glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &length);
+			glGetShaderInfoLog(vertexShader, length, 0, infoLog);
+			printf("ERROR: Failed to link shader program!\n");
+			printf("%s\n", infoLog);
+			delete[] infoLog;
+			succeeded = false;
+		}
+
+		*a_result = glCreateProgram();
+
+		glAttachShader(*a_result, vertexShader);
+		const char* varyings[] = { "position", "velocity", "lifetime", "lifespan" };
+		glTransformFeedbackVaryings(*a_result, 4, varyings, GL_INTERLEAVED_ATTRIBS);
+		glLinkProgram(*a_result);
+
+	
+		succeeded = true;
+
+
+		glDeleteShader(vertexShader);
+		fclose(vertexFile);	
+	}
+
+	return succeeded;
+}
+
 bool loadShaders(char* a_vertexFile, char* a_fragmentFile, GLuint* a_result)
 {
 	bool succeeded = false;
@@ -67,6 +125,90 @@ bool loadShaders(char* a_vertexFile, char* a_fragmentFile, GLuint* a_result)
 		fclose(fragmentFile);
 	}
 
+
+	return succeeded;
+}
+
+bool loadShaders(char* a_vertexFile, char* a_fragmentFile, char* a_geometryFile, GLuint* a_result)
+{
+	bool succeeded = false;
+
+	FILE* vertexFile = fopen(a_vertexFile, "r");
+	FILE* fragmentFile = fopen(a_fragmentFile, "r");
+	FILE* geometryFile = fopen(a_geometryFile, "r");
+
+	if (vertexFile == 0 || fragmentFile == 0 || geometryFile)
+	{
+		fclose(vertexFile);
+		fclose(fragmentFile);
+	}
+	else
+	{
+		fseek(vertexFile, 0, SEEK_END);
+		int vertexFileLength = ftell(vertexFile);
+		fseek(vertexFile, 0, SEEK_SET);
+
+		fseek(fragmentFile, 0, SEEK_END);
+		int fragmentFileLength = ftell(fragmentFile);
+		fseek(fragmentFile, 0, SEEK_SET);
+
+		fseek(geometryFile, 0, SEEK_END);
+		int geometryFileLength = ftell(geometryFile);
+		fseek(geometryFile, 0, SEEK_SET);
+
+		char* vsSource = new char[vertexFileLength];
+		char* fsSource = new char[fragmentFileLength];
+		char* gsSource = new char[geometryFileLength];
+
+		vertexFileLength = fread(vsSource, 1, vertexFileLength, vertexFile);
+		fragmentFileLength = fread(fsSource, 1, fragmentFileLength, fragmentFile);
+		geometryFileLength = fread(gsSource, 1, geometryFileLength, geometryFile);
+
+		int success = GL_FALSE;
+		unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		unsigned int geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+		
+		glShaderSource(vertexShader, 1, &vsSource, &vertexFileLength);
+		glCompileShader(vertexShader);
+		
+		glShaderSource(fragmentShader, 1, &fsSource, &fragmentFileLength);
+		glCompileShader(fragmentShader);
+
+		glShaderSource(geometryShader, 1, &gsSource, &geometryFileLength);
+		glCompileShader(geometryShader);
+
+		*a_result = glCreateProgram();
+
+		glAttachShader(*a_result, vertexShader);
+		glAttachShader(*a_result, fragmentShader);
+		glAttachShader(*a_result, geometryShader);
+		//glBindAttribLocation(*a_result, 0, "position");
+		//glBindAttribLocation(*a_result, 1, "TexCoord");
+		glLinkProgram(*a_result);
+		glGetProgramiv(*a_result, GL_LINK_STATUS, &success);
+
+		succeeded = true;
+
+		if (success == GL_FALSE)
+		{
+			int length = 0;
+			char* infoLog = new char[length];
+			glGetProgramiv(*a_result, GL_INFO_LOG_LENGTH, &length);
+			glGetProgramInfoLog(*a_result, length, 0, infoLog);
+			printf("ERROR: Failed to link shader program!\n");
+			printf("%s\n", infoLog);
+			delete[] infoLog;
+			succeeded = false;
+		}
+
+		glDeleteShader(fragmentShader);
+		glDeleteShader(vertexShader);
+		glDeleteShader(geometryShader);
+		fclose(vertexFile);
+		fclose(fragmentFile);
+		fclose(geometryFile);
+	}
 
 	return succeeded;
 }
