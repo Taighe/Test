@@ -2,62 +2,29 @@
 #include "gl_core_4_4.h"
 #include <cstdio>
 
-bool loadShader(char* a_vertexFile, GLuint* a_result)
+unsigned int loadShader(char* a_vertexFile, unsigned int a_type)
 {
-	bool succeeded = false;
-
-	FILE* vertexFile = fopen(a_vertexFile, "r");
-
-	if (vertexFile == 0)
+	FILE* file = fopen(a_vertexFile, "rb");
+	if (file == nullptr)
 	{
-		fclose(vertexFile);
+		return 0;
 	}
-	else
-	{
-		fseek(vertexFile, 0, SEEK_END);
-		int vertexFileLength = ftell(vertexFile);
-		fseek(vertexFile, 0, SEEK_SET);
-
-		char* vsSource = new char[vertexFileLength];
-
-		vertexFileLength = fread(vsSource, 1, vertexFileLength, vertexFile);
-
 		
-		unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(vertexShader, 1, &vsSource, &vertexFileLength);
-		glCompileShader(vertexShader);
-		
-		int success = GL_FALSE;
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-			
-		if (success == GL_FALSE)
-		{
-			int length = 0;
-			char* infoLog = new char[length];
-			glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &length);
-			glGetShaderInfoLog(vertexShader, length, 0, infoLog);
-			printf("ERROR: Failed to link shader program!\n");
-			printf("%s\n", infoLog);
-			delete[] infoLog;
-			succeeded = false;
-		}
+	fseek(file, 0, SEEK_END);
+	unsigned int length = ftell(file);
+	fseek(file, 0, SEEK_SET);
 
-		*a_result = glCreateProgram();
-
-		glAttachShader(*a_result, vertexShader);
-		const char* varyings[] = { "position", "velocity", "lifetime", "lifespan" };
-		glTransformFeedbackVaryings(*a_result, 4, varyings, GL_INTERLEAVED_ATTRIBS);
-		glLinkProgram(*a_result);
-
+	char* source = new char[length + 1];
+	memset(source, 0, length + 1);
+	fread(source, sizeof(char), length, file);
+	fclose(file);
 	
-		succeeded = true;
-
-
-		glDeleteShader(vertexShader);
-		fclose(vertexFile);	
-	}
-
-	return succeeded;
+	unsigned int shader = glCreateShader(a_type);
+	glShaderSource(shader, 1, &source, 0);
+	glCompileShader(shader);
+	
+	delete[] source;
+	return shader;
 }
 
 bool loadShaders(char* a_vertexFile, char* a_fragmentFile, GLuint* a_result)
@@ -137,7 +104,7 @@ bool loadShaders(char* a_vertexFile, char* a_fragmentFile, char* a_geometryFile,
 	FILE* fragmentFile = fopen(a_fragmentFile, "r");
 	FILE* geometryFile = fopen(a_geometryFile, "r");
 
-	if (vertexFile == 0 || fragmentFile == 0 || geometryFile)
+	if (vertexFile == 0 || fragmentFile == 0 || geometryFile == 0)
 	{
 		fclose(vertexFile);
 		fclose(fragmentFile);
@@ -193,8 +160,8 @@ bool loadShaders(char* a_vertexFile, char* a_fragmentFile, char* a_geometryFile,
 		if (success == GL_FALSE)
 		{
 			int length = 0;
-			char* infoLog = new char[length];
 			glGetProgramiv(*a_result, GL_INFO_LOG_LENGTH, &length);
+			char* infoLog = new char[length];
 			glGetProgramInfoLog(*a_result, length, 0, infoLog);
 			printf("ERROR: Failed to link shader program!\n");
 			printf("%s\n", infoLog);

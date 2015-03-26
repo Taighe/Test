@@ -1,12 +1,10 @@
 #version 410
-
-layout(location=0) in vec4 position;
-layout(location=1) in vec2 TexCoord;
-out vec2 vTexCoord;
-uniform mat4 projectionView;
+layout (location = 0) in vec4 position;
+layout (location = 1) in vec2 texCoord;
+out vec2 TexCoord;
 
 void main() 
 {
-	vTexCoord = TexCoord; 
-	gl_Position = projectionView * position; 
-}
+	gl_Position = position;
+	TexCoord = texCoord;
+}

@@ -6,12 +6,14 @@ layout(location=2) in float Lifetime;
 layout(location=3) in float Lifespan;
 
 out vec3 position;
+out vec3 velocity;
 out float lifetime;
 out float lifespan;
 
 void main()
 {
 	position = Position;
+	velocity = Velocity;
 	lifetime = Lifetime;
 	lifespan = Lifespan;
 }

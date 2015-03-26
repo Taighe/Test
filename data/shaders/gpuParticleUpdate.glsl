@@ -1,9 +1,9 @@
 #version 410
 
-layout(location=0) in vec3 Position;
-layout(location=1) in vec3 Velocity;
-layout(location=2) in float Lifetime;
-layout(location=3) in float Lifespan;
+layout(location = 0) in vec3 Position;
+layout(location = 1) in vec3 Velocity;
+layout(location = 2) in float Lifetime;
+layout(location = 3) in float Lifespan;
 
 out vec3 position;
 out vec3 velocity;
@@ -29,19 +29,21 @@ float rand(uint seed, float range)
 }
 
 void main()
-{
-	position = Position + Velocity * deltaTime;
-	lifetime = Lifetime;
+{		
+	position = Position + Velocity * deltaTime;	
+	velocity = Velocity;
+	lifetime = Lifetime + deltaTime;
 	lifespan = Lifespan;
 
-	//emit new particle as soon as it dies
 	if(lifetime > lifespan)
 	{
 		uint seed = uint(time * 1000.0) + uint(gl_VertexID);
+		
 		velocity.x = rand(seed++, 2) - 1;
 		velocity.y = rand(seed++, 2) - 1;
 		velocity.z = rand(seed++, 2) - 1;
 		velocity = normalize(velocity);
+
 		position = emitterPosition;
 		lifetime = 0;
 		lifespan = rand(seed++, lifeMax - lifeMin) + lifeMin;

@@ -1,10 +1,14 @@
 #version 410
+in vec2 fTexCoord;
+out vec4 FragColor;
+uniform sampler2D target;
 
-in vec2 vTexCoord;
-out vec4 fragColor;
-uniform sampler2D diffuse;
-
-void main() 
+// just sample the target and return the colour
+vec4 Simple() 
 {
-	fragColor = texture(diffuse, vTexCoord); 
+	return texture(target, fTexCoord);
+}
+void main()
+{
+	FragColor = Simple();
 }

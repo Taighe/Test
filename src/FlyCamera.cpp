@@ -1,4 +1,5 @@
 #include "FlyCamera.h"
+#include "TweakBar.h"
 
 FlyCamera::FlyCamera()
 {
@@ -9,6 +10,7 @@ FlyCamera::FlyCamera()
 	glfwSetCursorPos(glfwGetCurrentContext(), width / 2, height / 2);
 	m_Timer = 0;
 	m_EnableMouse = false;
+	m_keyDown = false;
 }
 
 void FlyCamera::update(float a_DeltaTime)
@@ -16,14 +18,20 @@ void FlyCamera::update(float a_DeltaTime)
 	m_Timer += a_DeltaTime;
 	int width, height;
 	glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
-	
-	glfwGetCursorPos(glfwGetCurrentContext(), &m_MousePosX, &m_MousePosY);
-	
-
-	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE) == GLFW_PRESS)
+		
+	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE) == GLFW_PRESS && m_keyDown == false)
 	{
 		m_EnableMouse = !m_EnableMouse;
+		glfwSetCursorPos(glfwGetCurrentContext(), width / 2, height / 2);
+		m_keyDown = true;
+	}	
+
+	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE) == GLFW_RELEASE && m_keyDown == true)
+	{
+		m_keyDown = false;
 	}
+
+	glfwGetCursorPos(glfwGetCurrentContext(), &m_MousePosX, &m_MousePosY);
 
 	if (m_MousePosX != width / 2 && m_EnableMouse)
 	{

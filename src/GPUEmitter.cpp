@@ -6,7 +6,7 @@ GPUEmitter::GPUEmitter()
 {
 	m_particles = nullptr;
 	m_maxParticles = 0;
-	m_position = vec3();
+	m_position = vec3(0, 0, 0);
 	m_drawShader = 0;
 	m_updateShader = 0;
 	m_lastDrawTime = 0;
@@ -69,7 +69,7 @@ void GPUEmitter::CreateBuffers()
 	//setup second buffer
 	glBindVertexArray(m_vao[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo[1]);
-	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * sizeof(GPUParticle), 0, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_maxParticles * sizeof(GPUParticle), m_particles, GL_STREAM_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GPUParticle), 0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GPUParticle), ((char*)0) + 12);
@@ -82,8 +82,20 @@ void GPUEmitter::CreateBuffers()
 
 void GPUEmitter::CreateDrawShader()
 {
-	loadShaders("./shaders/gpuParticleVert.glsl", "./shaders/gpuParticleFrag.glsl", "./shaders/gpuParticleGeom.glsl", &m_drawShader);
+	unsigned int vs = loadShader("./shaders/gpuParticleVert.glsl", GL_VERTEX_SHADER);
+	unsigned int fs = loadShader("./shaders/gpuParticleFrag.glsl", GL_FRAGMENT_SHADER);
+	unsigned int gs = loadShader("./shaders/gpuParticleGeom.glsl", GL_GEOMETRY_SHADER);
 
+	m_drawShader = glCreateProgram();
+
+	glAttachShader(m_drawShader, vs);
+	glAttachShader(m_drawShader, fs);
+	glAttachShader(m_drawShader, gs);
+	glLinkProgram(m_drawShader);
+
+	glDeleteShader(vs);
+	glDeleteShader(gs);
+	glDeleteShader(fs);
 	glUseProgram(m_drawShader);
 
 	// bind size information
@@ -101,7 +113,16 @@ void GPUEmitter::CreateDrawShader()
 
 void GPUEmitter::CreateUpdateShader()
 {
-	loadShader("./shaders/gpuParticleUpdate.glsl", &m_updateShader);
+	unsigned int vs = loadShader("./shaders/gpuParticleUpdate.glsl", GL_VERTEX_SHADER);
+	m_updateShader = glCreateProgram();
+	
+	glAttachShader(m_updateShader, vs);
+
+	const char* varyings[] = { "position", "velocity", "lifetime", "lifespan" };
+	glTransformFeedbackVaryings(m_updateShader, 4, varyings, GL_INTERLEAVED_ATTRIBS);
+	glLinkProgram(m_updateShader);
+
+	glDeleteProgram(vs);
 
 	glUseProgram(m_updateShader);
 
@@ -154,6 +175,6 @@ void GPUEmitter::Draw(float a_time, const mat4& a_cameraTransform, const mat4& a
 
 	glBindVertexArray(m_vao[otherBuffer]);
 	glDrawArrays(GL_POINTS, 0, m_maxParticles);
-
+	
 	m_activeBuffer = otherBuffer;
 }

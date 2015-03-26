@@ -34,13 +34,16 @@ bool GPUParticleApp::startup()
 	//loadTexture("./textures/rock_diffuse.tga", "./textures/rock_normal.tga", "./textures/rock_specular.tga");
 	//loadShaders("./shaders/particleVertex.glsl", "./shaders/particleFragment.glsl", &m_ProgramID);
 
+	m_Timer = 0;
+
 	m_ambientLight = vec3(0.1f);
 	m_lightDir = (vec3(0, -1, -1));
 	m_lightColor = vec3(1.0f);
 	m_specularPower = 15.0f;
 	m_GizmoSize = 10;
 	m_emitter = new GPUEmitter();
-	m_emitter->Init(100000, 0.1f, 5.0f, 5, 20, 1, 0.1f, vec4(1, 0, 0, 1), vec4(1, 1, 0, 1));
+
+	m_emitter->Init(10, 1, 10, 0.1, 10, 1, 0.1, vec4(1, 0, 0, 1), vec4(1, 1, 0, 1));
 
 	TwInit(TW_OPENGL_CORE, nullptr);
 	TwWindowSize(m_WindowWidth, m_WindowHeight);
@@ -65,6 +68,7 @@ bool GPUParticleApp::update()
 
 	float dt = glfwGetTime();
 	m_FPS = 1 / dt;
+	m_Timer += dt;
 	glfwSetTime(0.0f);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -92,13 +96,7 @@ bool GPUParticleApp::update()
 void GPUParticleApp::draw()
 {
 	glClearColor(m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, m_backgroundColor.w);
-	//glUseProgram(m_ProgramID);
-	//int projViewHandle = glGetUniformLocation(m_ProgramID, "projectionView");
 
-	//if (projViewHandle >= 0)
-	//{
-	//	glUniformMatrix4fv(projViewHandle, 1, false, (float*)&m_Camera->getProjectionView());
-	//}
 	m_emitter->Draw((float)glfwGetTime(), m_Camera->getWorldTransform(), m_Camera->getProjectionView());
 	TwDraw();
 

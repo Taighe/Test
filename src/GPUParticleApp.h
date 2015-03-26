@@ -32,6 +32,7 @@ private:
 	vec3 m_eyePos;
 	int m_GizmoSize;
 	float m_FPS;
+	float m_Timer;
 	vec4 m_backgroundColor;
 	float m_specularPower;
 	unsigned int m_ProgramID;

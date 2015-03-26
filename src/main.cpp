@@ -1,8 +1,9 @@
-#include "GPUParticleApp.h"
+#include "Deferred.h"
 
 int main()
 {
-	Application* app = new GPUParticleApp();
+	
+	Application* app = new DeferredApp();
 	if (app->startup() == true)
 	{
 		while (app->update() == true)

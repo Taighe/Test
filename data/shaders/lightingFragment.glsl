@@ -37,5 +37,5 @@ void main()
 	
 	//float d = max(0, dot(normalize(fragNormal.xyz), vec3(0,1,0)));
 	
-	fragColor = vec4(ambient + diffuse + specular, 1); 	
+	fragColor = vec4(ambient + diffuse, 1);
 }

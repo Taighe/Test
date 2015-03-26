@@ -17,9 +17,7 @@ class GPUEmitter
 public:
 	GPUEmitter();
 	virtual ~GPUEmitter();
-	void Init(unsigned int a_maxParticles, float a_lifetimeMin, float a_lifetimeMax, float a_velocityMin,
-		float a_velocityMax, float a_startSize, float a_endSize, const vec4& a_startColor, const vec4& a_endColor);
-
+	void Init(unsigned int a_maxParticles, float a_lifetimeMin, float a_lifetimeMax, float a_velocityMin, float a_velocityMax, float a_startSize, float a_endSize, const vec4& a_startColor, const vec4& a_endColor);
 	void Draw(float a_time, const mat4& a_cameraTransform, const mat4& a_projectionView);
 	void CreateBuffers();
 	void CreateUpdateShader();
@@ -31,7 +29,6 @@ public:
 	vec4 m_endColor;
 	vec3 m_position;
 
-	unsigned int m_firstDead;
 	unsigned int m_maxParticles;
 
 	float m_lifespanMin;
@@ -41,6 +38,7 @@ public:
 	float m_startSize;
 	float m_endSize;
 
+protected:
 	unsigned int m_activeBuffer;
 	unsigned int m_vao[2];
 	unsigned int m_vbo[2];

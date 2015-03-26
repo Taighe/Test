@@ -14,6 +14,7 @@ public:
 
 private:
 	bool m_EnableMouse;
+	bool m_keyDown;
 	vec3 m_Direction;
 	float m_Speed;
 	float m_Timer;

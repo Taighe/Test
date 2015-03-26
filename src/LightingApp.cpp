@@ -104,8 +104,6 @@ void LightingApp::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-
-
 	glUseProgram(m_ProgramID);
 	
 	int projViewHandle = glGetUniformLocation(m_ProgramID, "projectionView");
@@ -227,7 +225,6 @@ void LightingApp::createOpenGLBuffers(std::vector<tinyobj::shape_t>& shapes)
 		glBindVertexArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
 
 	}
 }
